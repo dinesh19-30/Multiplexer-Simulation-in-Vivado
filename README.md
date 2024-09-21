@@ -62,8 +62,6 @@ Truth Table
 Verilog Code
 
 4:1 MUX Gate-Level Implementation
-
-// mux4_to_1_gate.v
 module mux4_to_1_gate (
     input wire A,
     input wire B,
@@ -75,24 +73,19 @@ module mux4_to_1_gate (
 );
     wire not_S0, not_S1;
     wire A_and, B_and, C_and, D_and;
-
-    // Inverters for select lines
-    not (not_S0, S0);
-    not (not_S1, S1);
-
-    // AND gates for each input with select lines
-    and (A_and, A, not_S1, not_S0);
-    and (B_and, B, not_S1, S0);
-    and (C_and, C, S1, not_S0);
-    and (D_and, D, S1, S0);
-
-    // OR gate to combine all AND gate outputs
-    or (Y, A_and, B_and, C_and, D_and);
+    not not_gate_S0(not_S0, S0);
+    not not_gate_S1(not_S1, S1);
+    and and_gate_A(A_and, S0, S1, A);
+    and and_gate_B(B_and, S0, not_S1, B);
+    and and_gate_C(C_and, not_S0, S1, C);
+    and and_gate_D(D_and, not_S0, not_S1, D);
+    or or_gate(Y, A_and, B_and, C_and, D_and);
+    
 endmodule
+
 
 4:1 MUX Data Flow Implementation
 
-// mux4_to_1_dataflow.v
 module mux4_to_1_dataflow (
     input wire A,
     input wire B,
@@ -106,6 +99,7 @@ module mux4_to_1_dataflow (
                (~S1 & S0 & B) |
                (S1 & ~S0 & C) |
                (S1 & S0 & D);
+        
 endmodule
 
 4:1 MUX Behavioral Implementation
@@ -120,15 +114,15 @@ module mux4_to_1_behavioral (
     input wire S1,
     output reg Y
 );
-    always @(*) begin
-        case ({S1, S0})
-            2'b00: Y = A;
-            2'b01: Y = B;
-            2'b10: Y = C;
-            2'b11: Y = D;
-            default: Y = 1'bx; // Undefined
-        endcase
-    end
+always @(*) begin
+        case ({S0, S1})
+        2'b00: Y = A;
+        2'b01: Y = B;
+        2'b10: Y = C;
+        2'b11: Y = D;
+        default: Y = 0;
+        endcase
+    end
 endmodule
 
 4:1 MUX Structural Implementation
@@ -140,7 +134,10 @@ module mux2_to_1 (
     input wire S,
     output wire Y
 );
-    assign Y = S ? B : A;
+    not not_gate(not_S, S);
+    and and_gate_A(A_and, S, A);
+    and and_gate_B(B_and, not_S, B);
+    or or_gate(Y, A_and, B_and);
 endmodule
 
 
@@ -156,12 +153,11 @@ module mux4_to_1_structural (
 );
     wire mux_low, mux_high;
 
-    // Instantiate two 2:1 MUXes
-    mux2_to_1 mux0 (.A(A), .B(B), .S(S0), .Y(mux_low));
-    mux2_to_1 mux1 (.A(C), .B(D), .S(S0), .Y(mux_high));
+mux2_to_1 mux1 (A, B, S0, mux_low);
+mux2_to_1 mux2 (C, D, S0, mux_high);
 
-    // Instantiate the final 2:1 MUX
-    mux2_to_1 mux_final (.A(mux_low), .B(mux_high), .S(S1), .Y(Y));
+
+mux2_to_1 mux3 (mux_low, mux_high, S1, Y);
 endmodule
 
 Testbench Implementation
@@ -177,12 +173,88 @@ module mux4_to_1_tb;
     reg D;
     reg S0;
     reg S1;
-
-    // Outputs
     wire Y_gate;
     wire Y_dataflow;
     wire Y_behavioral;
     wire Y_structural;
+    // mux4_to_1_tb.v
+`timescale 1ns / 1ps
+
+module mux4_to_1_tb;
+    // Inputs
+    reg A;
+    reg B;
+    reg C;
+    reg D;
+    reg S0;
+    reg S1;
+
+    wire Y_gate;
+    wire Y_dataflow;
+    wire Y_behavioral;
+    wire Y_structural;
+
+   
+    mux4_to_1_gate uut_gate (
+        .A(A),
+        .B(B),
+        .C(C),
+        .D(D),
+        .S0(S0),
+        .S1(S1),
+        .Y(Y_gate)
+    );
+
+    mux4_to_1_dataflow uut_dataflow (
+        .A(A),
+        .B(B),
+        .C(C),
+        .D(D),
+        .S0(S0),
+        .S1(S1),
+        .Y(Y_dataflow)
+    );
+
+    mux4_to_1_behavioral uut_behavioral (
+        .A(A),
+        .B(B),
+        .C(C),
+        .D(D),
+        .S0(S0),
+        .S1(S1),
+        .Y(Y_behavioral)
+    );
+
+    mux4_to_1_structural uut_structural (
+        .A(A),
+        .B(B),
+        .C(C),
+        .D(D),
+        .S0(S0),
+        .S1(S1),
+        .Y(Y_structural)
+    );
+
+  
+    initial begin
+       
+        A = 0;
+        B = 0;
+        C = 0;
+        D = 0;
+        S0 = 0;
+        S1 = 0;
+        S0 = 0;
+        S1 = 0;
+        #10; 
+
+        if (Y_gate !== A || Y_dataflow !== A || Y_behavioral !== A || Y_structural !== A) begin
+            $display("Error: Incorrect output for S0=0, S1=0");
+        end
+        $finish;
+    end
+
+endmodule
 
     // Instantiate the Gate-Level MUX
     mux4_to_1_gate uut_gate (
@@ -250,18 +322,16 @@ module mux4_to_1_tb;
     initial begin
         $monitor("Time=%0t | S1=%b S0=%b | Inputs: A=%b B=%b C=%b D=%b | Y_gate=%b | Y_dataflow=%b | Y_behavioral=%b | Y_structural=%b",
                  $time, S1, S0, A, B, C, D, Y_gate, Y_dataflow, Y_behavioral, Y_structural);
-    end
-endmodule
+
 
 
 Sample Output
 
-Time=0 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=10 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=20 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=30 | S1=0 S0=1 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=40 | S1=1 S0=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-...
+![mux out](https://github.com/user-attachments/assets/8df02395-caee-49f8-a79d-c0143577da31)
+
+
+
+
 
 Conclusion:
 
