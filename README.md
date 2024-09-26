@@ -63,85 +63,71 @@ Verilog Code
 
 4:1 MUX Gate-Level Implementation
 
-// mux4_to_1_gate.v
-module mux4_to_1_gate (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
-);
-    wire not_S0, not_S1;
-    wire A_and, B_and, C_and, D_and;
-
-    // Inverters for select lines
-    not (not_S0, S0);
-    not (not_S1, S1);
-
-    // AND gates for each input with select lines
-    and (A_and, A, not_S1, not_S0);
-    and (B_and, B, not_S1, S0);
-    and (C_and, C, S1, not_S0);
-    and (D_and, D, S1, S0);
-
-    // OR gate to combine all AND gate outputs
-    or (Y, A_and, B_and, C_and, D_and);
+module multiplexer(s1,s0,a,b,c,d,y);
+input s1,s0,a,b,c,d;
+output y;
+wire[3:0]w;
+and g1(w[0],~s1,~s0,a);
+and g2(w[1],~s1,s0,b);
+and g3(w[2],s1,~s0,c);
+and g4(w[3],s1,s0,d);
+or g5(y,w[0],w[1],w[2],w[3]);
 endmodule
+output:![mux out](https://github.com/user-attachments/assets/1df9bd6c-6cfc-4cc6-adc2-957ec23ef253)
+
 
 4:1 MUX Data Flow Implementation
-
-// mux4_to_1_dataflow.v
-module mux4_to_1_dataflow (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output wire Y
+module mul_data(
+    output Y,        
+    input I0, I1, I2, I3, 
+    input S0, S1     
 );
-    assign Y = (~S1 & ~S0 & A) |
-               (~S1 & S0 & B) |
-               (S1 & ~S0 & C) |
-               (S1 & S0 & D);
+assign Y = (~S1 & ~S0 & I0) |  
+               (~S1 & S0 & I1)  |  
+               (S1 & ~S0 & I2)  |  
+               (S1 & S0 & I3);    
 endmodule
+output:![data flow](https://github.com/user-attachments/assets/707fd0f1-ef0e-424a-9440-9ea6cad42f71)
+
+
 
 4:1 MUX Behavioral Implementation
 
-// mux4_to_1_behavioral.v
-module mux4_to_1_behavioral (
-    input wire A,
-    input wire B,
-    input wire C,
-    input wire D,
-    input wire S0,
-    input wire S1,
-    output reg Y
-);
-    always @(*) begin
-        case ({S1, S0})
-            2'b00: Y = A;
-            2'b01: Y = B;
-            2'b10: Y = C;
-            2'b11: Y = D;
-            default: Y = 1'bx; // Undefined
-        endcase
-    end
+module mux(s, i, y);
+input [1:0] s;
+input [3:0] i;
+output reg y;  
+
+always @(s or i)  
+begin
+    case (s)
+        2'b00: y = i[0];   
+        2'b01: y = i[1];   
+        2'b10: y = i[2];   
+        2'b11: y = i[3];   
+        default: y = 1'b0;
+    endcase
+end
 endmodule
+output: ![behavioural](https://github.com/user-attachments/assets/a9b8c192-b941-485e-8777-0138ddb74f94)
+
 
 4:1 MUX Structural Implementation
 
-// mux2_to_1.v
-module mux2_to_1 (
-    input wire A,
-    input wire B,
-    input wire S,
-    output wire Y
-);
-    assign Y = S ? B : A;
+module mux_4to1 (a,b,c,d,S0,S1,Y);
+input a,b,c,d;
+    input  S0, S1;       
+    output  Y ;          
+
+assign Y = (S1 == 0 && S0 == 0) ? a :
+               (S1 == 0 && S0 == 1) ? b :
+               (S1 == 1 && S0 == 0) ? c :
+               (S1 == 1 && S0 == 1) ? d:
+
 endmodule
+output:![structural](https://github.com/user-attachments/assets/5f20246f-5e5f-4f4d-8a40-ec2491a0724f)
+
+
 
 
 // mux4_to_1_structural.v
