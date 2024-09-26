@@ -155,12 +155,8 @@ module mux4_to_1_structural (
     output wire Y
 );
     wire mux_low, mux_high;
-
-    // Instantiate two 2:1 MUXes
     mux2_to_1 mux0 (.A(A), .B(B), .S(S0), .Y(mux_low));
     mux2_to_1 mux1 (.A(C), .B(D), .S(S0), .Y(mux_high));
-
-    // Instantiate the final 2:1 MUX
     mux2_to_1 mux_final (.A(mux_low), .B(mux_high), .S(S1), .Y(Y));
 endmodule
 
@@ -254,14 +250,9 @@ module mux4_to_1_tb;
 endmodule
 
 
-Sample Output
+Sample Outpu
+[mux out](https://github.com/user-attachments/assets/5c892ea0-7fb9-4217-b515-7b41dc3d73e8)
 
-Time=0 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=10 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=20 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=30 | S1=0 S0=1 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=40 | S1=1 S0=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-...
 
 Conclusion:
 
