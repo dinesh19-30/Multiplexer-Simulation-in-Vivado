@@ -139,7 +139,82 @@ end
 endmodule
 output: ![structural](https://github.com/user-attachments/assets/1f42d9ea-4745-42fd-848a-6c6c1e7869ee)
 
+Testbench:
 
+// Outputs
+wire Y_gate;
+wire Y_dataflow;
+wire Y_behavioral;
+wire Y_structural;
+
+// Instantiate the Gate-Level MUX
+mux4_to_1_gate uut_gate (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .S0(S0),
+    .S1(S1),
+    .Y(Y_gate)
+);
+
+// Instantiate the Data Flow MUX
+mux4_to_1_dataflow uut_dataflow (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .S0(S0),
+    .S1(S1),
+    .Y(Y_dataflow)
+);
+
+// Instantiate the Behavioral MUX
+mux4_to_1_behavioral uut_behavioral (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .S0(S0),
+    .S1(S1),
+    .Y(Y_behavioral)
+);
+
+// Instantiate the Structural MUX
+mux4_to_1_structural uut_structural (
+    .A(A),
+    .B(B),
+    .C(C),
+    .D(D),
+    .S0(S0),
+    .S1(S1),
+    .Y(Y_structural)
+);
+
+// Test vectors
+initial begin
+    // Initialize Inputs
+    A = 0; B = 0; C = 0; D = 0; S0 = 0; S1 = 0;
+
+  // Apply test cases
+    #10 {S1, S0, A, B, C, D} = 6'b00_0000; // Y = A = 0
+    #10 {S1, S0, A, B, C, D} = 6'b00_0001; // Y = A = 1
+    #10 {S1, S0, A, B, C, D} = 6'b01_0010; // Y = B = 1
+    #10 {S1, S0, A, B, C, D} = 6'b10_0100; // Y = C = 1
+    #10 {S1, S0, A, B, C, D} = 6'b11_1000; // Y = D = 1
+    #10 {S1, S0, A, B, C, D} = 6'b01_1100; // Y = B = 1
+    #10 {S1, S0, A, B, C, D} = 6'b10_1010; // Y = C = 1
+    #10 {S1, S0, A, B, C, D} = 6'b11_0110; // Y = D = 1
+    #10 {S1, S0, A, B, C, D} = 6'b00_1111; // Y = A = 1
+    #10 $stop;
+end
+
+// Monitor the outputs
+initial begin
+    $monitor("Time=%0t | S1=%b S0=%b | Inputs: A=%b B=%b C=%b D=%b | Y_gate=%b | Y_dataflow=%b | Y_behavioral=%b | Y_structural=%b",
+             $time, S1, S0, A, B, C, D, Y_gate, Y_dataflow, Y_behavioral, Y_structural);
+end
+output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
 
 
 
