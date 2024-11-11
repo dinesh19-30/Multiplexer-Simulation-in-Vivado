@@ -1,11 +1,13 @@
-SIMULATION AND IMPLEMENTATION OF LOGIC GATES
-AIM:
+# SIMULATION AND IMPLEMENTATION OF LOGIC GATES :
+### AIM:
+
 To design and simulate a 4:1 Multiplexer (MUX) using Verilog HDL in four different modeling styles—Gate-Level, Data Flow, Behavioral, and Structural—and to verify its functionality through a testbench using the Vivado 2023.1 simulation environment. The experiment aims to understand how different abstraction levels in Verilog can be used to describe the same digital logic circuit and analyze their performance.
 
-APPARATUS REQUIRED:
+### APPARATUS REQUIRED:
+
 Vivado 2023.1
 
-Procedure
+### PROCEDURE:
 1. Launch Vivado
 Open Vivado 2023.1 by double-clicking the Vivado icon or searching for it in the Start menu.
 2. Create a New Project
@@ -51,17 +53,17 @@ You can include the timing diagram from the simulation window showing the correc
 10. Close the Simulation
 Once done, close the simulation by going to Simulation → "Close Simulation".
 
-Logic Diagram
+### Logic Diagram:
 
 ![image](https://github.com/user-attachments/assets/d4ab4bc3-12b0-44dc-8edb-9d586d8ba856)
 
-Truth Table
+### Truth Table:
 
 ![image](https://github.com/user-attachments/assets/c850506c-3f6e-4d6b-8574-939a914b2a5f)
 
-Verilog Code
+### Verilog Code:
 
-###4:1 MUX Gate-Level Implementation
+### 4:1 MUX Gate-Level Implementation
 ~~~
 module multiplexer(s1,s0,a,b,c,d,y);
 input s1,s0,a,b,c,d;
@@ -74,10 +76,10 @@ and g4(w[3],s1,s0,d);
 or g5(y,w[0],w[1],w[2],w[3]);
 endmodule
 ~~~
-###output: ![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
+### output: ![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
 
 
-###4:1 MUX Data Flow Implementation
+### 4:1 MUX Data Flow Implementation
 ~~~
 module mul_data(
     output Y,        
@@ -91,11 +93,11 @@ module mul_data(
 
 endmodule
 ~~~
-###output: ![data flow](https://github.com/user-attachments/assets/5a1bce5f-6033-4384-95df-cc2cb5f47e5c)
+### output: ![data flow](https://github.com/user-attachments/assets/6caf1be7-5ff1-4600-807e-17921ddede3d)
 
 
 
-###4:1 MUX Behavioral Implementation
+### 4:1 MUX Behavioral Implementation
 ~~~
 module mux4_to_1_behavioral (
     input wire A,
@@ -117,10 +119,10 @@ module mux4_to_1_behavioral (
     end
 endmodule
 ~~~
-###output : ![behavioural](https://github.com/user-attachments/assets/5d0df1cb-ca67-4175-a59e-29bb770d7b2d)
+### output : ![behavioural](https://github.com/user-attachments/assets/5d0df1cb-ca67-4175-a59e-29bb770d7b2d)
 
 
-###4:1 MUX Structural Implementation
+### 4:1 MUX Structural Implementation
 ~~~
 module mux(s, i, y);
 input [1:0] s;
@@ -139,9 +141,10 @@ begin
 end
 endmodule
 ~~~
-###output: ![structural](https://github.com/user-attachments/assets/1f42d9ea-4745-42fd-848a-6c6c1e7869ee)
+### output: ![struct](https://github.com/user-attachments/assets/796a1b3d-9821-4c75-b8d1-c5c8c6935f43)
 
-###Testbench:
+
+### Testbench:
 ~~~
 module multiplexer_tb;
   // Declare inputs as reg and outputs as wire
@@ -176,18 +179,8 @@ endmodule
 ~~~
 
 
-###output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
+### output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
 
-
-
-Sample Output
-
-Time=0 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=10 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=0 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=20 | S1=0 S0=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=30 | S1=0 S0=1 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-Time=40 | S1=1 S0=0 | Inputs: A=0 B=0 C=0 D=1 | Y_gate=0 | Y_dataflow=0 | Y_behavioral=0 | Y_structural=0
-...
 
 Conclusion:
 
