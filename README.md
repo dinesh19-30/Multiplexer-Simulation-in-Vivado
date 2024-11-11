@@ -76,7 +76,7 @@ and g4(w[3],s1,s0,d);
 or g5(y,w[0],w[1],w[2],w[3]);
 endmodule
 ~~~
-### output: ![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
+### output:![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
 
 
 ### 4:1 MUX Data Flow Implementation
@@ -90,12 +90,9 @@ module mul_data(
                (~S1 & S0 & I1)  |  
                (S1 & ~S0 & I2)  |  
                (S1 & S0 & I3);     
-
 endmodule
 ~~~
-### output: ![data flow](https://github.com/user-attachments/assets/6caf1be7-5ff1-4600-807e-17921ddede3d)
-
-
+### output: ![data](https://github.com/user-attachments/assets/ab1c2922-0594-462d-8827-fa9982a68ff6)
 
 ### 4:1 MUX Behavioral Implementation
 ~~~
@@ -119,7 +116,7 @@ module mux4_to_1_behavioral (
     end
 endmodule
 ~~~
-### output : ![behavioural](https://github.com/user-attachments/assets/5d0df1cb-ca67-4175-a59e-29bb770d7b2d)
+### output :![behavioural](https://github.com/user-attachments/assets/5d0df1cb-ca67-4175-a59e-29bb770d7b2d)
 
 
 ### 4:1 MUX Structural Implementation
@@ -141,7 +138,7 @@ begin
 end
 endmodule
 ~~~
-### output: ![struct](https://github.com/user-attachments/assets/796a1b3d-9821-4c75-b8d1-c5c8c6935f43)
+### output:![struct](https://github.com/user-attachments/assets/796a1b3d-9821-4c75-b8d1-c5c8c6935f43)
 
 
 ### Testbench:
@@ -177,8 +174,6 @@ s1 = 0; s0 = 0; a = 1; b = 0; c = 0; d = 0; #10;  // Test case 1
   end
 endmodule
 ~~~
-
-
 ### output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
 
 
