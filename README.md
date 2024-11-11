@@ -61,8 +61,8 @@ Truth Table
 
 Verilog Code
 
-4:1 MUX Gate-Level Implementation
-
+###4:1 MUX Gate-Level Implementation
+~~~
 module multiplexer(s1,s0,a,b,c,d,y);
 input s1,s0,a,b,c,d;
 output y;
@@ -73,11 +73,12 @@ and g3(w[2],s1,~s0,c);
 and g4(w[3],s1,s0,d);
 or g5(y,w[0],w[1],w[2],w[3]);
 endmodule
-output: ![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
+~~~
+###output: ![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
 
 
-  
-4:1 MUX Data Flow Implementation
+###4:1 MUX Data Flow Implementation
+~~~
 module mul_data(
     output Y,        
     input I0, I1, I2, I3, 
@@ -89,13 +90,13 @@ module mul_data(
                (S1 & S0 & I3);     
 
 endmodule
-output: ![data flow](https://github.com/user-attachments/assets/5a1bce5f-6033-4384-95df-cc2cb5f47e5c)
+~~~
+###output: ![data flow](https://github.com/user-attachments/assets/5a1bce5f-6033-4384-95df-cc2cb5f47e5c)
 
 
 
-4:1 MUX Behavioral Implementation
-
-
+###4:1 MUX Behavioral Implementation
+~~~
 module mux4_to_1_behavioral (
     input wire A,
     input wire B,
@@ -115,12 +116,12 @@ module mux4_to_1_behavioral (
         endcase
     end
 endmodule
-output : ![behavioural](https://github.com/user-attachments/assets/5d0df1cb-ca67-4175-a59e-29bb770d7b2d)
+~~~
+###output : ![behavioural](https://github.com/user-attachments/assets/5d0df1cb-ca67-4175-a59e-29bb770d7b2d)
 
 
-
-4:1 MUX Structural Implementation
-
+###4:1 MUX Structural Implementation
+~~~
 module mux(s, i, y);
 input [1:0] s;
 input [3:0] i;
@@ -137,84 +138,14 @@ begin
     endcase
 end
 endmodule
-output: ![structural](https://github.com/user-attachments/assets/1f42d9ea-4745-42fd-848a-6c6c1e7869ee)
+~~~
+###output: ![structural](https://github.com/user-attachments/assets/1f42d9ea-4745-42fd-848a-6c6c1e7869ee)
 
-Testbench:
+###Testbench:
 
-// Outputs
-wire Y_gate;
-wire Y_dataflow;
-wire Y_behavioral;
-wire Y_structural;
 
-// Instantiate the Gate-Level MUX
-mux4_to_1_gate uut_gate (
-    .A(A),
-    .B(B),
-    .C(C),
-    .D(D),
-    .S0(S0),
-    .S1(S1),
-    .Y(Y_gate)
-);
 
-// Instantiate the Data Flow MUX
-mux4_to_1_dataflow uut_dataflow (
-    .A(A),
-    .B(B),
-    .C(C),
-    .D(D),
-    .S0(S0),
-    .S1(S1),
-    .Y(Y_dataflow)
-);
-
-// Instantiate the Behavioral MUX
-mux4_to_1_behavioral uut_behavioral (
-    .A(A),
-    .B(B),
-    .C(C),
-    .D(D),
-    .S0(S0),
-    .S1(S1),
-    .Y(Y_behavioral)
-);
-
-// Instantiate the Structural MUX
-mux4_to_1_structural uut_structural (
-    .A(A),
-    .B(B),
-    .C(C),
-    .D(D),
-    .S0(S0),
-    .S1(S1),
-    .Y(Y_structural)
-);
-
-// Test vectors
-initial begin
-    // Initialize Inputs
-    A = 0; B = 0; C = 0; D = 0; S0 = 0; S1 = 0;
-
-  // Apply test cases
-    #10 {S1, S0, A, B, C, D} = 6'b00_0000; // Y = A = 0
-    #10 {S1, S0, A, B, C, D} = 6'b00_0001; // Y = A = 1
-    #10 {S1, S0, A, B, C, D} = 6'b01_0010; // Y = B = 1
-    #10 {S1, S0, A, B, C, D} = 6'b10_0100; // Y = C = 1
-    #10 {S1, S0, A, B, C, D} = 6'b11_1000; // Y = D = 1
-    #10 {S1, S0, A, B, C, D} = 6'b01_1100; // Y = B = 1
-    #10 {S1, S0, A, B, C, D} = 6'b10_1010; // Y = C = 1
-    #10 {S1, S0, A, B, C, D} = 6'b11_0110; // Y = D = 1
-    #10 {S1, S0, A, B, C, D} = 6'b00_1111; // Y = A = 1
-    #10 $stop;
-end
-
-// Monitor the outputs
-initial begin
-    $monitor("Time=%0t | S1=%b S0=%b | Inputs: A=%b B=%b C=%b D=%b | Y_gate=%b | Y_dataflow=%b | Y_behavioral=%b | Y_structural=%b",
-             $time, S1, S0, A, B, C, D, Y_gate, Y_dataflow, Y_behavioral, Y_structural);
-end
-output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
+###output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
 
 
 
