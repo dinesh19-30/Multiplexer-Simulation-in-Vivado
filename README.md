@@ -142,7 +142,38 @@ endmodule
 ###output: ![structural](https://github.com/user-attachments/assets/1f42d9ea-4745-42fd-848a-6c6c1e7869ee)
 
 ###Testbench:
+~~~
+module multiplexer_tb;
+  // Declare inputs as reg and outputs as wire
+  reg s1, s0, a, b, c, d;
+  wire y;
 
+  // Instantiate the multiplexer module
+  multiplexer uut (
+    .s1(s1), 
+    .s0(s0), 
+    .a(a), 
+    .b(b), 
+    .c(c), 
+    .d(d), 
+    .y(y)
+  );
+
+  // Test cases
+  initial begin
+    // Monitor changes in inputs and output
+    $monitor("s1 = %b, s0 = %b, a = %b, b = %b, c = %b, d = %b, y = %b", s1, s0, a, b, c, d, y);
+
+s1 = 0; s0 = 0; a = 1; b = 0; c = 0; d = 0; #10;  // Test case 1
+    s1 = 0; s0 = 1; a = 0; b = 1; c = 0; d = 0; #10;  // Test case 2
+    s1 = 1; s0 = 0; a = 0; b = 0; c = 1; d = 0; #10;  // Test case 3
+    s1 = 1; s0 = 1; a = 0; b = 0; c = 0; d = 1; #10;  // Test case 4
+    
+// Finish simulation
+    $finish;
+  end
+endmodule
+~~~
 
 
 ###output:![mtb](https://github.com/user-attachments/assets/3afc4242-9590-4941-9269-e8fe21377187)
