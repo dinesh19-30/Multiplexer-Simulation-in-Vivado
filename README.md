@@ -77,7 +77,8 @@ or g5(y,w[0],w[1],w[2],w[3]);
 endmodule
 ~~~
 ## output:
-![mux out](https://github.com/user-attachments/assets/65b2b4c7-996c-4b6c-908a-3d4a254fe4b3)
+![gt](https://github.com/user-attachments/assets/016f9490-d84c-43ba-9830-9aa0f44d8620)
+
 
 
 ### 4:1 MUX Data Flow Implementation
